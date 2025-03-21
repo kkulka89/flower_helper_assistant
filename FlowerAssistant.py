@@ -18,14 +18,11 @@ class ChatBot():
         self.chain = self.create_conversional_chain()
         self.store = {}
 
+    #First part of chain only related to retrieve from vectorbase
+    #can be replacec by create_csv_agent  langchain_experimental.agents.agent_toolkits import create_csv_agent (based on pandas)/verify
+    #with bigger database sql query from db can be better
     def create_rag_chain(self):
         retriever = FlowerVectorStore().retrieve_flower_vector_store()
-
-        # ### Contextualize question ###
-        # contextualize_q_system_prompt = """Given a chat history and the latest user question \
-        # which might reference context in the chat history, formulate a standalone question \
-        # which can be understood without the chat history. Do NOT answer the question, \
-        # just reformulate it if needed and otherwise return it as is."""
 
         contextualize_q_system_prompt = """Given a chat history and the latest user question \
                 which might reference context in the chat history, formulate a standalone question related to flowers \
@@ -43,6 +40,7 @@ class ChatBot():
         )
         return history_aware_retriever
 
+    #main part of chatbot
     def create_question_answer_chain(self):
         qa_system_prompt = """
             You are AI assistant Flowerbot2000 specialized in Flowers.
@@ -71,7 +69,6 @@ class ChatBot():
         question_answer_chain = create_stuff_documents_chain(model, qa_prompt)
 
         return question_answer_chain
-
 
 
     def get_session_history(self, session_id: str) -> BaseChatMessageHistory:

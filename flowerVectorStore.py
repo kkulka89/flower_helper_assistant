@@ -7,7 +7,6 @@ class FlowerLoader:
         self.csv_loader = CSVLoader(file_path=csv_path, csv_args={
            'delimiter': ',',
            'quotechar': '"',
-           # 'fieldnames': ['Index', 'Height', 'Weight']
        })
 
 
